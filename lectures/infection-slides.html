@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>소아 감염학 슬라이드</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --ink:#16202a; --muted:#5b6670; --line:#d9dee3; --soft:#f3f6f9;
+  --accent:#1f4e79; --accent2:#c0392b; --tb:#1f5fa8; --tbbg:#e6effa; --gl:#1d7a4c; --glbg:#e3f4ea; --inf:#a2560b; --infbg:#fcefdc;
+  --red:#b3261e; --redbg:#fdecea; --green:#1d7a4c; --greenbg:#e8f5ee;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#ffffff;color:var(--ink);font-family:"Noto Sans KR","Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;overflow:hidden}
+#stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#ffffff}
+#deck{width:1920px;height:1080px;position:relative;transform-origin:center center;flex:none}
+.slide{position:absolute;inset:0;padding:70px 100px 96px;display:none;flex-direction:column;background:#ffffff;overflow:hidden}
+.slide.on{display:flex}
+.slide h2{font-size:60px;line-height:1.2;margin:0 0 14px;font-weight:900;color:var(--accent);letter-spacing:-.5px}
+.slide h2 small{font-size:32px;color:var(--muted);font-weight:500;margin-left:18px}
+.kicker{font-size:26px;font-weight:700;color:var(--accent2);letter-spacing:1px;margin-bottom:6px}
+.rule{height:5px;width:120px;background:var(--accent);border-radius:3px;margin:4px 0 30px}
+.body{flex:1;min-height:0;font-size:34px;line-height:1.5}
+ul{margin:0;padding-left:1.1em}
+li{margin:0 0 .45em}
+li::marker{color:var(--accent)}
+b,strong{color:#0d2a44}
+.em{color:var(--accent2);font-weight:700}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+.key{border-left:10px solid var(--accent);background:var(--soft);padding:22px 30px;border-radius:8px;font-size:36px;line-height:1.45;margin-bottom:26px}
+.warn{border-left:10px solid var(--red);background:var(--redbg);padding:18px 28px;border-radius:8px}
+.good{border-left:10px solid var(--green);background:var(--greenbg);padding:18px 28px;border-radius:8px}
+.note{border-left:10px solid var(--inf);background:var(--infbg);padding:18px 28px;border-radius:8px}
+.tag{display:inline-block;font-size:.62em;font-weight:700;padding:.08em .5em;border-radius:6px;vertical-align:.2em;white-space:nowrap;margin-left:.2em}
+.tb{background:var(--tbbg);color:var(--tb)} .gl{background:var(--glbg);color:var(--gl)} .inf{background:var(--infbg);color:var(--inf)}
+table{border-collapse:collapse;width:100%;font-size:28px;line-height:1.38}
+th,td{border:2px solid var(--line);padding:12px 16px;text-align:left;vertical-align:top}
+th{background:var(--accent);color:#fff;font-weight:700;border-color:var(--accent)}
+tr:nth-child(even) td{background:#f8fafc}
+td.h{font-weight:700;color:#0d2a44;white-space:nowrap}
+.sm{font-size:28px} .xs{font-size:24px}
+.foot{position:absolute;left:100px;right:100px;bottom:30px;display:flex;justify-content:space-between;align-items:flex-end;font-size:21px;color:var(--muted);border-top:2px solid var(--line);padding-top:12px}
+.foot .src{max-width:1500px}
+.foot .pg{font-weight:700;color:var(--accent)}
+/* title / section */
+.title{justify-content:center;padding-left:140px}
+.title h1{font-size:100px;line-height:1.15;margin:0 0 22px;color:var(--accent);font-weight:900;letter-spacing:-1px}
+.title .sub{font-size:40px;color:var(--ink);margin-bottom:60px}
+.title .meta{font-size:30px;color:var(--muted);line-height:1.7}
+.title .bar{width:200px;height:10px;background:var(--accent2);border-radius:5px;margin-bottom:40px}
+.section{justify-content:center;padding-left:140px;background:#ffffff}
+.section .num{font-size:180px;font-weight:900;color:#e3eaf2;line-height:1}
+.section h1{font-size:96px;margin:0 0 20px;color:var(--accent);font-weight:900}
+.section p{font-size:36px;color:var(--muted);margin:0}
+/* flow */
+.flow{display:flex;gap:16px;align-items:stretch;margin:6px 0 30px}
+.flow .st{flex:1;border:3px solid var(--accent);border-radius:14px;padding:18px 16px;text-align:center;font-size:29px;line-height:1.35;background:#fff}
+.flow .st b{display:block;font-size:34px;margin-bottom:6px;color:var(--accent)}
+.flow .st.hot{border-color:var(--accent2)} .flow .st.hot b{color:var(--accent2)}
+.flow .ar{align-self:center;font-size:44px;color:var(--muted)}
+.timeline{display:grid;grid-template-columns:240px 1fr;row-gap:18px;column-gap:30px;font-size:36px}
+.timeline .t{font-weight:900;color:var(--accent);text-align:right}
+.card{border:2px solid var(--line);border-radius:14px;padding:20px 24px;background:#fff;font-size:26px;line-height:1.45}
+.card h4{margin:0 0 8px;font-size:31px;color:var(--accent)}
+.big{font-size:44px;font-weight:900;color:var(--accent2)}
+.center{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.qbox{border:4px dashed var(--accent);border-radius:20px;padding:50px 70px;font-size:44px;line-height:1.5;max-width:1500px}
+/* chrome */
+#bar{position:fixed;left:0;top:0;height:6px;background:var(--accent2);width:0;transition:width .2s;z-index:5}
+#help{position:fixed;left:16px;bottom:10px;transition:opacity 1s;font:14px/1.4 system-ui,sans-serif;color:#9aa4ad;z-index:5;user-select:none}
+@media print{
+  @page{size:1920px 1080px;margin:0}
+  html,body{overflow:visible;height:auto}
+  #stage{position:static;display:block}
+  #deck{transform:none!important;width:1920px;height:auto}
+  .slide{display:flex!important;position:relative;width:1920px;height:1080px;page-break-after:always;break-after:page}
+  #bar,#help{display:none}
+}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div id="stage"><div id="deck">
+
+<!-- 1 -->
+<section class="slide title">
+  <div class="bar"></div>
+  <h1>소아 감염학<br>총론과 세균 감염</h1>
+  <div class="sub">발열 영아부터 패혈쇼크, 수막염, 학교·가정에서 흔한 세균 감염까지</div>
+  <div class="meta">의과대학 학생 · 강의 30분 + 임상추론 시뮬레이터 액티브러닝<br>주 교재: 홍창의 소아과학 12판<br>건양대학교병원 소아청소년과</div>
+</section>
+
+<!-- 2 -->
+<section class="slide">
+  <div class="kicker">수업 안내</div><h2>오늘의 진행</h2><div class="rule"></div>
+  <div class="body cols" style="zoom:1.15">
+    <div class="timeline">
+      <div class="t">0~3분</div><div>수업 전 형성평가 10문항</div>
+      <div class="t">3~18분</div><div>총론: 발열, 영아 발열, 패혈증, 검사, 항생제</div>
+      <div class="t">18~33분</div><div>각론: 수막염, 수막알균, GAS, 백일해, 골관절, 장염, 신고</div>
+      <div class="t">이후</div><div>시뮬레이터 케이스 7개 (조별 또는 개인)</div>
+      <div class="t">마무리</div><div>디브리핑, 수업 후 형성평가 10문항</div>
+    </div>
+    <div class="sm">
+      <b>학습목표</b>
+      <ul style="margin-top:12px">
+        <li>영아 발열을 연령군으로 나누어 심각한 세균 감염(SBI) 위험을 평가한다</li>
+        <li>패혈쇼크 첫 1시간 처치를 순서대로 수행한다</li>
+        <li>검체를 올바르게 채취하고 검사 결과를 해석한다</li>
+        <li>항생제 5단계로 경험적 항생제를 고르고 조정한다</li>
+        <li>주요 세균 감염의 진단·치료·예방을 설명한다</li>
+        <li>신고·격리·접촉자 예방 투약을 실행한다</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span class="src">국시 의사직무상황(PE) 53·72·71·68·46·88·13·61·8·31·43·94·98 매핑 · 의사 국가시험[필기] 평가목표집</span><span class="pg"></span></div>
+</section>
+
+<!-- 3 -->
+<section class="slide">
+  <div class="kicker">시작 전 3분</div><h2>수업 전 형성평가</h2><div class="rule"></div>
+  <div class="body center">
+    <div class="qbox">10문항, 3분<br><span class="sm" style="color:var(--muted)">정답보다 "지금 내가 어디쯤인지"를 확인하는 시간입니다.<br>같은 주제를 수업 후 형성평가에서 다시 묻습니다.</span></div>
+  </div>
+  <div class="foot"><span class="src">문항지는 별도 배포</span><span class="pg"></span></div>
+</section>
+
+<!-- 4 -->
+<section class="slide">
+  <div class="kicker">근거 표기</div><h2>교과서가 기본, 최신 근거는 함께</h2><div class="rule"></div>
+  <div class="body" style="zoom:1.15">
+    <div class="sm" style="margin-bottom:22px"><span class="tag tb">p.○</span> 홍창의 소아과학 12판 쪽수 &nbsp;&nbsp; <span class="tag gl">G○</span> 가이드라인·컨센서스 &nbsp;&nbsp; <span class="tag inf">해설</span> 강의자의 정리·추론</div>
+    <table>
+      <tr><th style="width:20%">주제</th><th style="width:40%">교과서 (12판)</th><th>최신 근거</th></tr>
+      <tr><td class="h">소아 패혈증 정의</td><td>SIRS + 감염 (2005 국제 합의), "중증 패혈증" 단계 <span class="tag tb">p.381</span></td><td>Phoenix 2024: 감염 의심 + Phoenix Sepsis Score ≥2. "중증 패혈증" 없음 <span class="tag gl">G3</span></td></tr>
+      <tr><td class="h">패혈쇼크 승압제</td><td>2012 SSC 표 <span class="tag tb">p.382</span></td><td>SSC 2020: dopamine보다 epinephrine·norepinephrine <span class="tag gl">G2</span></td></tr>
+      <tr><td class="h">발열 영아 위험 분류</td><td>필라델피아·보스턴·로체스터 <span class="tag tb">p.375</span></td><td>AAP 2021 (8~60일, 염증표지자 중심) <span class="tag gl">G1</span></td></tr>
+      <tr><td class="h">백일해 치료</td><td>본문 erythromycin 14일, 표 12-12 azithromycin 5일 <span class="tag tb">p.427</span></td><td>azithromycin 5일이 표준 <span class="tag gl">G9</span></td></tr>
+      <tr><td class="h">GAS 검사 대상</td><td>바이러스 증상이 있으면 검사하지 않음 <span class="tag tb">p.412</span></td><td>IDSA 2025: Centor·McIsaac 점수로 선별 (방향은 같음) <span class="tag gl">G7</span></td></tr>
+    </table>
+  </div>
+  <div class="foot"><span class="src">차이가 나는 항목은 디브리핑 토론 소재로 씁니다</span><span class="pg"></span></div>
+</section>
+
+<!-- 5 section -->
+<section class="slide section">
+  <div class="num">Ⅰ</div><h1>총론</h1><p>발열 · 영아 발열 · 패혈증 · 검사 · 항생제 (15분)</p>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <div class="kicker">1. 발열</div><h2>"몇 도인가"보다 "무엇이 숨어 있는가"</h2><div class="rule"></div>
+  <div class="body cols" style="zoom:1.3">
+    <ul>
+      <li><b>발열</b> 직장 체온 ≥38°C, <b>고열</b> &gt;40°C <span class="tag tb">p.372</span></li>
+      <li>IL-1, IL-6, TNF-α, IFN → PGE2 → 시상하부 set-point 상승 <span class="tag tb">p.372</span></li>
+      <li>&gt;41°C: 감염보다 중추열, 악성 고열, 열사병, 약물열 먼저 <span class="tag tb">p.372</span></li>
+      <li>&lt;36°C: 심한 패혈증과 관련될 수 있음 <span class="tag tb">p.372</span></li>
+    </ul>
+    <div>
+      <div class="warn" style="margin-bottom:22px"><b>아파 보이는 아이 + 점상출혈</b><br>→ 수막알균혈증, 급성 세균 심내막염부터 <span class="tag tb">p.373</span></div>
+      <ul class="sm">
+        <li>체온 1°C당 맥박 약 10회/분 상승. 상대 느린맥은 장티푸스·브루셀라·약물열 <span class="tag tb">p.373</span></li>
+        <li>해열제: acetaminophen 10~15 mg/kg 4시간마다, ibuprofen 5~10 mg/kg 8시간마다(6개월 이후). aspirin 금지(Reye) <span class="tag tb">p.373</span></li>
+        <li>해열제는 편하게 할 뿐, 경과를 바꾸지 않음 <span class="tag tb">p.373</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span class="src">홍창의 소아과학 12판 p.372~373</span><span class="pg"></span></div>
+</section>
+
+<!-- 7 -->
+<section class="slide">
+  <div class="kicker">2. 영아 발열</div><h2>연령군이 접근법을 결정한다</h2><div class="rule"></div>
+  <div class="body" style="zoom:1.15">
+    <table>
+      <tr><th style="width:16%">연령군</th><th style="width:42%">주요 원인과 위험</th><th>원칙</th></tr>
+      <tr><td class="h">28일 미만</td><td>GBS, E. coli, Listeria, HSV. 아파 보이지 않아도 약 7%가 SBI <span class="tag tb">p.374</span></td><td><b>입원</b>, 혈액·소변·뇌척수액 배양, ampicillin + cefotaxime, HSV 의심 시 acyclovir <span class="tag tb">p.374~375</span></td></tr>
+      <tr><td class="h">1~3개월</td><td>대부분 바이러스. SBI 7~13%: <span class="em">요로감염 5~13%</span> &gt; 균혈증 1~2% &gt; 수막염 0.2~0.5% <span class="tag tb">p.374~375</span></td><td>아파 보이면 입원·배양·비경구 항생제. 아니면 저위험 기준으로 분류 <span class="tag tb">p.375</span></td></tr>
+      <tr><td class="h">3~36개월</td><td>Hib·PCV 접종 후 잠재 균혈증 &lt;0.5%, 요로감염이 중요 <span class="tag tb">p.376</span></td><td>39°C 미만, 아파 보이지 않으면 외래 관찰 가능. 소변 검사 대상 선별 <span class="tag tb">p.376</span></td></tr>
+    </table>
+    <div class="key" style="margin-top:28px;margin-bottom:0">"아파 보이지 않는다"는 SBI를 배제하지 못합니다. 배양용 소변은 <b>도뇨 또는 치골상부 천자</b>로. 소변주머니는 배양에 쓰지 않습니다. <span class="tag inf">해설</span></div>
+  </div>
+  <div class="foot"><span class="src">홍창의 소아과학 12판 p.373~376 · 케이스 1</span><span class="pg"></span></div>
+</section>
+
+<!-- 8 -->
+<section class="slide">
+  <div class="kicker">2. 영아 발열</div><h2>저위험 기준: 교과서와 AAP 2021</h2><div class="rule"></div>
+  <div class="body cols" style="grid-template-columns:1.25fr 1fr;gap:44px;zoom:1.25">
+    <table class="xs" style="font-size:24px">
+      <tr><th></th><th>필라델피아</th><th>보스턴</th><th>로체스터</th></tr>
+      <tr><td class="h">대상</td><td>28~89일</td><td>29~56일</td><td>0~60일</td></tr>
+      <tr><td class="h">혈액 WBC</td><td>&lt;15,000, 간상구/전체 &lt;0.2</td><td>&lt;20,000</td><td>5,000~15,000, 간상구 ≤1,500</td></tr>
+      <tr><td class="h">소변</td><td>WBC &lt;10/HPF, 그람염색 음성</td><td>WBC &lt;10/HPF, LE 음성</td><td>WBC ≤10/HPF</td></tr>
+      <tr><td class="h">뇌척수액</td><td>WBC &lt;8, 그람염색 음성</td><td>WBC &lt;10</td><td>포함 안 함</td></tr>
+      <tr><td class="h">저위험이면</td><td>항생제 없이 귀가</td><td>ceftriaxone 1회 후 귀가</td><td>항생제 없이 귀가</td></tr>
+    </table>
+    <div>
+      <div class="good" style="margin-bottom:20px"><b>AAP 2021</b> <span class="tag gl">G1</span><br><span class="sm">8~60일, 아파 보이지 않는 영아. 소변검사 + 염증표지자로 위험 분류<br>PCT &gt;0.5 ng/mL, ANC &gt;4,000~5,200/µL, CRP &gt;2.0 mg/dL<br>29~60일 + 염증표지자 정상 → 소변 양성이어도 요추천자 생략 가능</span></div>
+      <div class="note sm"><b>토론</b> 교과서: "항생제를 쓰기로 했다면 그 전에 뇌척수액 검사가 바람직" <span class="tag tb">p.376</span></div>
+    </div>
+  </div>
+  <div class="foot"><span class="src">홍창의 소아과학 12판 p.374~376 표 12-2 · G1 Pantell RH, et al. Pediatrics 2021;148:e2021052228</span><span class="pg"></span></div>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+  <div class="kicker">3. 패혈증</div><h2>정의: SIRS 중심에서 장기 기능장애 중심으로</h2><div class="rule"></div>
+  <div class="body cols" style="zoom:1.3">
+    <div>
+      <b>교과서 (2005 국제 합의)</b> <span class="tag tb">p.381 표 12-5</span>
+      <ul class="sm" style="margin-top:12px">
+        <li><b>SIRS</b>: 4개 중 2개 이상(체온 또는 백혈구 이상 필수). 체온, 빠른맥, 빠른호흡, 백혈구</li>
+        <li><b>패혈증</b> = SIRS + 감염</li>
+        <li><b>중증 패혈증</b> = + 심혈관 기능장애, ARDS, 또는 2개 이상 장기 기능장애</li>
+        <li><b>패혈쇼크</b> = 1시간 40 mL/kg 넘게 수액을 줘도 저혈압, 승압제 필요, 또는 관류 이상 2개</li>
+      </ul>
+    </div>
+    <div>
+      <div class="good"><b>Phoenix 기준 (2024)</b> <span class="tag gl">G3</span>
+        <ul class="sm" style="margin-top:12px">
+          <li><b>패혈증</b> = 감염 의심 + Phoenix Sepsis Score ≥2<br>(호흡, 심혈관, 응고, 신경 4개 장기)</li>
+          <li><b>패혈쇼크</b> = 패혈증 + 심혈관 점수 ≥1</li>
+          <li>SIRS와 "중증 패혈증" 단계는 쓰지 않음</li>
+        </ul>
+      </div>
+      <p class="sm" style="margin-top:24px">균혈증은 혈액 배양 양성일 뿐, 패혈증과 같은 말이 아닙니다. <span class="tag tb">p.379</span></p>
+    </div>
+  </div>
+  <div class="foot"><span class="src">홍창의 소아과학 12판 p.379~381 · G3 Schlapbach LJ, et al. JAMA 2024;331:665-674</span><span class="pg"></span></div>
+</section>
+
+<!-- 10 -->
+<section class="slide">
+  <div class="kicker">3. 패혈쇼크</div><h2>첫 1시간: 시간 싸움</h2><div class="rule"></div>
+  <div class="body" style="zoom:1.15">
+    <div class="flow">
+      <div class="st"><b>산소</b>face mask → HFNC·CPAP</div><div class="ar">›</div>
+      <div class="st"><b>혈관</b>말초가 안 되면 바로 골내(IO)</div><div class="ar">›</div>
+      <div class="st"><b>배양</b>혈액 배양. 항생제를 늦추지 않음</div><div class="ar">›</div>
+      <div class="st hot"><b>항생제</b>인지 후 1시간 안</div><div class="ar">›</div>
+      <div class="st hot"><b>수액</b>등장성 20 mL/kg, 재평가 후 반복</div><div class="ar">›</div>
+      <div class="st"><b>승압제</b>epinephrine 또는 norepinephrine</div>
+    </div>
+    <div class="cols" style="gap:44px">
+      <ul class="sm">
+        <li>볼루스마다 맥박, 모세혈관 재충혈, <b>간 크기, 폐음</b>을 재평가. 과부하 징후면 멈춤 <span class="tag tb">p.382</span></li>
+        <li>승압제는 중심정맥 전이라도 말초로 시작 가능 <span class="tag tb">p.382</span> <span class="tag gl">G2</span></li>
+        <li>저혈당 교정, 원인 병소 제거, 불응성이면 hydrocortisone 고려 <span class="tag tb">p.381~382</span></li>
+      </ul>
+      <ul class="sm">
+        <li>지역사회 원인균: 폐렴알균, Hib, 수막알균, 살모넬라 <span class="tag tb">p.379</span></li>
+        <li>호중구 감소는 전격 패혈쇼크의 나쁜 예후 인자 <span class="tag tb">p.379~380</span></li>
+        <li>사망률: 건강한 소아 약 3%, 만성 질환 6~9% <span class="tag tb">p.382</span></li>
+        <li>감별: 장중첩증, 심근염, 부신기능부전, 대사이상, 학대 <span class="tag tb">p.380</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span class="src">홍창의 소아과학 12판 p.379~382 · G2 Weiss SL, et al. Pediatr Crit Care Med 2020;21:e52-e106 · 케이스 2</span><span class="pg"></span></div>
+</section>
+
+<!-- 11 -->
+<section class="slide">
+  <div class="kicker">4. 검사실 진단</div><h2>결과의 질은 검체가 결정한다</h2><div class="rule"></div>
+  <div class="body" style="zoom:1.3">
+    <table style="font-size:27px">
+      <tr><th style="width:17%">검사</th><th>핵심</th></tr>
+      <tr><td class="h">그람염색</td><td>신속·경제적. 뇌척수액에서 유용하나 10⁴⁻⁵/mL 이상이어야 보여 민감도가 낮음 <span class="tag tb">p.397</span></td></tr>
+      <tr><td class="h">혈액 배양</td><td>체중에 맞는 혈액량, 피부 소독 후 건조. 80% 이상이 24시간 안에 양성 <span class="tag tb">p.397</span></td></tr>
+      <tr><td class="h">소변 배양</td><td>치골상부 천자 균 검출 = 의미 있음, 카테터 ≥10³/mL, 중간뇨 ≥10⁴⁻⁵/mL. 2시간 안에 운반 <span class="tag tb">p.397~398</span></td></tr>
+      <tr><td class="h">대변 배양</td><td>기본은 살모넬라·시겔라·캄필로박터. Yersinia, Vibrio, O157:H7은 따로 의뢰 <span class="tag tb">p.398</span></td></tr>
+      <tr><td class="h">관절액</td><td>혈액배양병에도 접종하면 Kingella kingae 검출률 상승 <span class="tag tb">p.398</span></td></tr>
+      <tr><td class="h">GAS 신속항원</td><td>특이도 ≥95%, 민감도 80~90%. 소아는 음성이면 배양으로 확인 <span class="tag tb">p.412</span></td></tr>
+      <tr><td class="h">혈청·PCR</td><td>IgM 최근 감염, IgG는 4배 상승으로 판단. PCR은 백일해·Mycoplasma·HSV에 유용 <span class="tag tb">p.399</span></td></tr>
+    </table>
+  </div>
+  <div class="foot"><span class="src">홍창의 소아과학 12판 p.397~399, p.412</span><span class="pg"></span></div>
+</section>
+
+<!-- 12 -->
+<section class="slide">
+  <div class="kicker">5. 항생제</div><h2>항생제를 쓰기 전 5단계</h2><div class="rule"></div>
+  <div class="body cols" style="grid-template-columns:1.2fr 1fr;zoom:1.25">
+    <div>
+      <div class="flow" style="flex-direction:column;gap:12px;margin:0">
+        <div class="st" style="text-align:left"><b style="display:inline">① 필요성</b> 항생제가 필요한 세균 감염인가</div>
+        <div class="st" style="text-align:left"><b style="display:inline">② 검체</b> 항생제 전에 미생물 검사를 했는가</div>
+        <div class="st hot" style="text-align:left"><b style="display:inline">③ 경험적 선택</b> 국내 감수성 + 숙주 요인</div>
+        <div class="st" style="text-align:left"><b style="display:inline">④ 조정</b> 결과·경과로 de-escalation</div>
+        <div class="st" style="text-align:left"><b style="display:inline">⑤ 안전성</b> 부작용 관찰</div>
+      </div>
+      <p class="xs" style="margin-top:14px;color:var(--muted)">홍창의 소아과학 12판 p.400</p>
+    </div>
+    <div class="sm">
+      <b>국내 내성</b> (2017 Kor-GLASS) <span class="tag tb">p.400</span>
+      <ul style="margin-top:10px">
+        <li>E. coli cefotaxime 내성 32.4%</li>
+        <li>K. pneumoniae 26.1%</li>
+        <li>S. aureus methicillin 내성 53.2%</li>
+        <li>폐렴알균 penicillin 내성 매우 높음</li>
+      </ul>
+      <div class="key sm" style="margin-top:20px">항생제를 <b>쓰지 않는 결정</b>도 적정 사용입니다. 60~70%가 잘못 쓰인다는 보고가 있습니다. <span class="tag tb">p.400</span></div>
+    </div>
+  </div>
+  <div class="foot"><span class="src">홍창의 소아과학 12판 p.400~401 · 디브리핑에서 7개 케이스에 적용</span><span class="pg"></span></div>
+</section>
+
+<!-- 13 -->
+<section class="slide">
+  <div class="kicker">5. 항생제</div><h2>계열별 요점</h2><div class="rule"></div>
+  <div class="body" style="zoom:1.2">
+    <table style="font-size:28px">
+      <tr><th style="width:19%">계열</th><th>요점</th></tr>
+      <tr><td class="h">Penicillin</td><td>A군·B군 사슬알균, 매독, Listeria, 수막알균의 주치료제. aminopenicillin은 내성 증가로 사용 폭이 줄어듦</td></tr>
+      <tr><td class="h">Cephalosporin</td><td>1세대(cefazolin, cephalexin): 포도알균·GAS 피부연조직. 3세대(cefotaxime, ceftriaxone): 수막염·패혈증. ceftriaxone은 칼슘 수액과 섞지 않음</td></tr>
+      <tr><td class="h">Carbapenem</td><td>가장 넓은 스펙트럼. 소아 수막염에는 meropenem(imipenem은 경련 경향). MRSA·E. faecium에는 무효</td></tr>
+      <tr><td class="h">Vancomycin</td><td>내성 폐렴알균, MRSA, 발열성 호중구 감소증, 의료기구 감염. 천천히 주입해 red man syndrome 감소</td></tr>
+    </table>
+    <p class="sm" style="margin-top:22px">정상 숙주 감염은 대부분 <b>한 가지</b> 항생제로 치료합니다. 병합은 다균 감염, 호중구 감소증, 결핵처럼 정해진 경우에만 씁니다. <span class="tag tb">p.400~401</span></p>
+  </div>
+  <div class="foot"><span class="src">홍창의 소아과학 12판 p.400~401</span><span class="pg"></span></div>
+</section>
+
+<!-- 14 section -->
+<section class="slide section">
+  <div class="num">Ⅱ</div><h1>각론</h1><p>수막염 · 수막알균 · GAS · 백일해 · 골관절 · 장염 · 신고 (15분)</p>
+</section>
+
+<!-- 15 -->
+<section class="slide">
+  <div class="kicker">6. 세균 수막염</div><h2>원인균과 증상</h2><div class="rule"></div>
+  <div class="body cols" style="zoom:1.3">
+    <ul class="sm">
+      <li>백신 보급 지역의 주원인: <b>폐렴알균, 수막알균</b> <span class="tag tb">p.1236</span></li>
+      <li>국내 3~59개월: 폐렴알균 65.0%, H. influenzae 23.0%. 5세 이상: 수막알균 43.0%, 폐렴알균 39.0% <span class="tag tb">p.1237</span></li>
+      <li>위험 요인: 무비증, 보체 결손, 뇌척수액 누출, 와우 이식(폐렴알균 30배), T세포 결손(Listeria) <span class="tag tb">p.1237</span></li>
+    </ul>
+    <div>
+      <div class="warn sm" style="margin-bottom:20px">12~18개월 미만은 <b>수막 자극 징후가 없을 수 있음</b>. 보챔, 처짐, 대천문 팽윤이 단서 <span class="tag tb">p.1238</span></div>
+      <ul class="sm">
+        <li>뇌압 상승: 구토, 대천문 팽윤, 제3·6뇌신경 마비, 느린맥 + 고혈압, 무호흡 <span class="tag tb">p.1238</span></li>
+        <li>경련 20~30%. 4일 뒤에도 지속되면 예후 나쁨 <span class="tag tb">p.1238</span></li>
+        <li>열성경련처럼 보여도 처짐이 지속되면 수막염을 감별 <span class="tag inf">해설</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span class="src">홍창의 소아과학 12판 p.1236~1238 · 케이스 3</span><span class="pg"></span></div>
+</section>
+
+<!-- 16 -->
+<section class="slide">
+  <div class="kicker">6. 세균 수막염</div><h2>뇌척수액 해석</h2><div class="rule"></div>
+  <div class="body" style="zoom:1.3">
+    <table style="font-size:29px">
+      <tr><th>구분</th><th>백혈구(/µL)</th><th>우세 세포</th><th>당(mg/dL)</th><th>단백(mg/dL)</th></tr>
+      <tr><td class="h">정상</td><td>&lt;5</td><td>림프구</td><td>&gt;50 (혈당의 75%)</td><td>20~45</td></tr>
+      <tr><td class="h" style="color:var(--accent2)">급성 세균</td><td>100~10,000 이상<br>(흔히 300~2,000)</td><td>다핵구 75~95%</td><td><b>&lt;40</b> (혈당의 50% 미만)</td><td>100~500</td></tr>
+      <tr><td class="h">부분 치료 세균</td><td>5~10,000</td><td>다핵구(길면 단핵구)</td><td>정상 또는 감소</td><td>100~500</td></tr>
+      <tr><td class="h">바이러스</td><td>&lt;1,000</td><td>단핵구</td><td>대개 정상</td><td>50~200</td></tr>
+      <tr><td class="h">결핵</td><td>10~500</td><td>림프구(초기 다핵구)</td><td>&lt;50</td><td>100~3,000</td></tr>
+    </table>
+    <p class="sm" style="margin-top:22px">치료 전 그람염색 70~90% 양성, 혈액 배양 80~90% 동정. CRP·ESR·PCT만으로 항생제를 결정하지 않습니다. <span class="tag tb">p.1239</span></p>
+  </div>
+  <div class="foot"><span class="src">홍창의 소아과학 12판 p.1238 표 20-31, p.1239</span><span class="pg"></span></div>
+</section>
+
+<!-- 17 -->
+<section class="slide">
+  <div class="kicker">6. 세균 수막염</div><h2>요추천자 금기와 경험적 치료</h2><div class="rule"></div>
+  <div class="body cols" style="zoom:1.25">
+    <div>
+      <b>요추천자를 미루는 경우</b> <span class="tag tb">p.1239</span>
+      <ul class="sm" style="margin-top:10px">
+        <li>의식 저하 + 제3·6뇌신경 마비, 고혈압·느린맥·호흡 이상 (<b>대천문 팽윤만은 예외</b>)</li>
+        <li>즉각적 소생술이 필요한 심폐 악화</li>
+        <li>천자 부위 피부 감염</li>
+        <li>혈소판 감소는 절대 금기가 아님</li>
+      </ul>
+      <div class="warn sm" style="margin-top:18px">요추천자를 못 하면 <b>항생제부터</b>. 위험 요인이 없으면 일상적 CT로 항생제를 늦추지 않음 <span class="tag tb">p.1239</span></div>
+    </div>
+    <div>
+      <div class="key" style="font-size:33px">vancomycin 60 mg/kg/일<br>+ ceftriaxone 100 mg/kg/일 (최대 2 g/dose)<br>또는 cefotaxime 300 mg/kg/일 <span class="tag tb">p.1239</span></div>
+      <ul class="sm">
+        <li>국내 penicillin 내성 폐렴알균 &gt;80% <span class="tag tb">p.1239</span></li>
+        <li>Listeria 의심(신생아, T세포 결손) 때만 ampicillin 추가 <span class="tag tb">p.1239</span></li>
+        <li>Dexamethasone 0.15 mg/kg 6시간마다 2일: 6주 이상 Hib 수막염의 난청 감소. 첫 항생제 1~2시간 전 또는 동시 <span class="tag tb">p.1240</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span class="src">홍창의 소아과학 12판 p.1239~1240</span><span class="pg"></span></div>
+</section>
+
+<!-- 18 -->
+<section class="slide">
+  <div class="kicker">6. 세균 수막염</div><h2>치료 기간, 합병증, 예후</h2><div class="rule"></div>
+  <div class="body cols" style="zoom:1.3">
+    <div>
+      <b>치료 기간</b> <span class="tag tb">p.1239</span>
+      <table class="sm" style="margin:12px 0 22px;font-size:28px">
+        <tr><td class="h">폐렴알균(감수성)</td><td>10~14일</td></tr>
+        <tr><td class="h">수막알균</td><td>5~7일</td></tr>
+        <tr><td class="h">Hib</td><td>7~10일</td></tr>
+        <tr><td class="h">그람음성 간균</td><td>3주</td></tr>
+      </table>
+      <ul class="sm">
+        <li>정상 혈압이면 SIADH 배제 전까지 유지량의 1/2~2/3. 저혈압이면 제한하지 않음 <span class="tag tb">p.1240</span></li>
+      </ul>
+    </div>
+    <div>
+      <ul class="sm">
+        <li>합병증: 경련, 뇌압 상승, 경막밑 삼출(10~30%), 뇌신경 마비, SIADH, 정맥동 혈전증 <span class="tag tb">p.1240</span></li>
+        <li>사망률 10% 미만(폐렴알균이 가장 높음), 생존자 10~20%에 신경발달 후유증 <span class="tag tb">p.1240</span></li>
+      </ul>
+      <div class="key" style="margin-top:20px">가장 흔한 후유증은 <b>감각신경 난청</b><br><span class="sm">폐렴알균 최대 30%, 수막알균 10%, Hib 5~20%.<br>모든 환아는 퇴원 전후 청력검사 <span class="tag tb">p.1240</span></span></div>
+    </div>
+  </div>
+  <div class="foot"><span class="src">홍창의 소아과학 12판 p.1239~1240</span><span class="pg"></span></div>
+</section>
+
+<!-- 19 -->
+<section class="slide">
+  <div class="kicker">7. 수막알균 감염</div><h2>발열 + 비탈색성 점상출혈 = 응급</h2><div class="rule"></div>
+  <div class="body cols" style="zoom:1.3">
+    <ul class="sm">
+      <li>그람음성 쌍알균. A, B, C, W, Y가 침습 질환. 건강한 소아 2~5%가 보균 <span class="tag tb">p.422</span></li>
+      <li>고위험: 보체 결핍(C3, C5~C9, properdin), 무비증 <span class="tag tb">p.422</span></li>
+      <li>바이러스 질환처럼 시작 → 저혈압, DIC, 부신 출혈(Waterhouse-Friderichsen) <span class="tag tb">p.422~423</span></li>
+      <li>진단: 혈액·뇌척수액·피부 병변 배양, 점상출혈 도말, PCR. <b>코인두 배양은 진단 가치 없음</b> <span class="tag tb">p.423</span></li>
+      <li>치료: cefotaxime 또는 ceftriaxone, 대부분 5~7일 <span class="tag tb">p.423</span></li>
+    </ul>
+    <div>
+      <div class="key sm"><b>순서</b>: 쇼크 치료와 1시간 안 항생제가 먼저 → 그다음 신고·격리·접촉자</div>
+      <table style="font-size:27px">
+        <tr><td class="h">격리</td><td>항생제 시작 후 24시간 비말격리 <span class="tag tb">p.423</span></td></tr>
+        <tr><td class="h">접촉자</td><td>rifampicin, ceftriaxone, ciprofloxacin (보균 제거 90~95%) <span class="tag tb">p.424</span></td></tr>
+        <tr><td class="h">환자 본인</td><td>3세대 세팔로스포린을 쓰지 않았다면 퇴원 전 보균 제거 <span class="tag tb">p.424</span></td></tr>
+        <tr><td class="h">신고</td><td>제2급, 24시간 이내 <span class="tag gl">G11</span></td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="foot"><span class="src">홍창의 소아과학 12판 p.422~424 · G11 감염병예방법·질병관리청 · 케이스 2</span><span class="pg"></span></div>
+</section>
+
+<!-- 20 -->
+<section class="slide">
+  <div class="kicker">8. A군 사슬알균</div><h2>성홍열의 임상 양상</h2><div class="rule"></div>
+  <div class="body cols" style="zoom:1.3">
+    <ul class="sm">
+      <li>인두염은 5~15세, 겨울~초봄. 잠복기 2~5일 <span class="tag tb">p.409</span></li>
+      <li>GAS는 소아 급성 인두염의 15~30%, 대부분은 바이러스 <span class="tag tb">p.412</span></li>
+      <li>소아의 15~20%가 인두 보균자 <span class="tag tb">p.409</span></li>
+      <li>적절한 항생제 24시간 뒤 대개 전염력 소실 <span class="tag tb">p.409</span></li>
+    </ul>
+    <div class="card" style="font-size:29px">
+      <h4>성홍열 <span class="tag tb">p.410~411</span></h4>
+      <ul>
+        <li>갑작스러운 고열, 인두염, 구토, 복통</li>
+        <li>연구개 점상출혈, 흰 딸기혀 → <b>붉은 딸기혀</b></li>
+        <li>24~48시간 뒤 목·겨드랑이·사타구니에서 시작하는 <b>사포 같은</b> 미만성 구진</li>
+        <li><b>Pastia 선</b>, 입 주위 창백</li>
+        <li>3~4일 뒤 얼굴부터 손발 끝까지 막처럼 벗겨짐</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span class="src">홍창의 소아과학 12판 p.409~412 · 케이스 4</span><span class="pg"></span></div>
+</section>
+
+<!-- 21 -->
+<section class="slide">
+  <div class="kicker">8. A군 사슬알균</div><h2>진단, 치료, 합병증</h2><div class="rule"></div>
+  <div class="body cols" style="zoom:1.3">
+    <div>
+      <ul class="sm">
+        <li>바이러스 증상(콧물, 기침, 입 안 궤양, 쉰 목소리)이 있으면 검사하지 않음 <span class="tag tb">p.412</span> <span class="tag gl">G7</span></li>
+        <li>신속항원검사 양성 → 치료. 소아는 <b>음성이면 배양</b> <span class="tag tb">p.412</span></li>
+      </ul>
+      <div class="key" style="font-size:32px;margin-top:16px">amoxicillin 50 mg/kg 1일 1회<br>(최대 1,000 mg) <b>10일</b> <span class="tag tb">p.413</span></div>
+      <ul class="sm">
+        <li>순응도가 낮으면 benzathine penicillin G 1회 근주 (27.3 kg 미만 60만 U, 이상 120만 U)</li>
+        <li>macrolide는 국내 내성 4.6~18.2%로 1차 약이 아님 <span class="tag tb">p.413</span></li>
+      </ul>
+    </div>
+    <div>
+      <table style="font-size:27px">
+        <tr><th>합병증</th><th>요점</th></tr>
+        <tr><td class="h">화농</td><td>경부 림프절염, 편도 주위·인두 뒤 농양, 중이염</td></tr>
+        <tr><td class="h">류마티스열</td><td>증상 9일 안에 치료하면 <b>예방됨</b></td></tr>
+        <tr><td class="h">사구체신염</td><td>치료해도 예방된다는 <b>근거 없음</b></td></tr>
+        <tr><td class="h">PSRA</td><td>잠복기 10일 이내, 큰 관절, NSAIDs 반응 적음</td></tr>
+      </table>
+      <p class="sm" style="margin-top:18px">등원: 항생제 시작 24시간 뒤. 신고: 제2급 <span class="tag tb">p.413</span> <span class="tag gl">G11</span></p>
+    </div>
+  </div>
+  <div class="foot"><span class="src">홍창의 소아과학 12판 p.412~413 · G7 IDSA 2025 GAS 인두염 · G11</span><span class="pg"></span></div>
+</section>
+
+<!-- 22 -->
+<section class="slide">
+  <div class="kicker">9. 백일해</div><h2>어린 영아는 whoop 없이 무호흡으로 온다</h2><div class="rule"></div>
+  <div class="body" style="zoom:1.3">
+    <div class="flow">
+      <div class="st"><b>카타르기 1~2주</b>콧물, 결막염, 경미한 기침<br><span class="em">전염력 최고</span></div><div class="ar">›</div>
+      <div class="st hot"><b>경해기 2~4주 이상</b>발작 기침, whoop, 기침 끝 구토<br>3개월 미만: 무호흡·청색증</div><div class="ar">›</div>
+      <div class="st"><b>회복기 1~2주</b>기침 감소<br>감기 때 재발 가능</div>
+    </div>
+    <div class="cols">
+      <ul class="sm">
+        <li>B. pertussis, 사람이 유일한 숙주. 면역이 없으면 80~100% 감염 <span class="tag tb">p.425</span></li>
+        <li>주 감염원은 특징 없는 <b>청소년·성인 가족</b> <span class="tag tb">p.426</span></li>
+        <li>잠복기 3~12일, 전체 6~8주 <span class="tag tb">p.426</span></li>
+      </ul>
+      <ul class="sm">
+        <li>백혈구 15,000~100,000, 림프구 증가. 영아는 없을 수 있음 <span class="tag tb">p.426~427</span></li>
+        <li>진단: 코인두 배양(Regan-Lowe), <b>PCR</b> <span class="tag tb">p.427</span></li>
+        <li>2024년 국내 첫 백일해 사망: 1차 접종 전 2개월 미만 영아 <span class="tag gl">G13</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span class="src">홍창의 소아과학 12판 p.425~427 · G13 질병관리청 보도자료 2024.11.12 · 케이스 5</span><span class="pg"></span></div>
+</section>
+
+<!-- 23 -->
+<section class="slide">
+  <div class="kicker">9. 백일해</div><h2>치료, 격리, 예방</h2><div class="rule"></div>
+  <div class="body" style="zoom:1.2">
+    <table style="font-size:27px">
+      <tr><th style="width:14%">연령</th><th>Azithromycin (권장)</th><th>Erythromycin</th><th>TMP-SMZ (대체)</th></tr>
+      <tr><td class="h">1개월 미만</td><td>10 mg/kg 1일 1회, 5일</td><td>40 mg/kg/일 4회, 14일 (날문협착 주의)</td><td>2개월까지 금기</td></tr>
+      <tr><td class="h">1~5개월</td><td>10 mg/kg 1일 1회, 5일</td><td>상동</td><td>2개월 이상 TMP 8 + SMZ 40 mg/kg/일</td></tr>
+      <tr><td class="h">6개월 이상</td><td>첫날 10 mg/kg, 2~5일째 5 mg/kg</td><td>40 mg/kg/일, 7~14일</td><td>상동</td></tr>
+    </table>
+    <div class="cols3" style="margin-top:26px">
+      <div class="card"><h4>입원</h4>3개월 미만, 심폐·신경근육 질환 <span class="tag tb">p.427</span></div>
+      <div class="card"><h4>격리</h4>항생제 시작 후 5일. 쓰지 않으면 발작 기침 시작 후 3주 <span class="tag tb">p.427</span></div>
+      <div class="card"><h4>예방</h4>가족 전원 예방 투약. 임신부 27~36주 Tdap, DTaP 2·4·6개월. 신고 제2급 <span class="tag gl">G13</span> <span class="tag gl">G11</span></div>
+    </div>
+  </div>
+  <div class="foot"><span class="src">홍창의 소아과학 12판 p.427~428 표 12-12 (원출처 Red Book 2009) · G9 CDC MMWR 2005 · G13</span><span class="pg"></span></div>
+</section>
+
+<!-- 24 -->
+<section class="slide">
+  <div class="kicker">10. 골수염·화농관절염</div><h2>열 + 다리를 딛지 않음 → 화농관절염부터 배제</h2><div class="rule"></div>
+  <div class="body cols" style="zoom:1.3">
+    <ul class="sm">
+      <li>화농관절염 50%가 2세 이하, 고관절·무릎 <span class="tag tb">p.386~388</span></li>
+      <li>전 연령에서 S. aureus, 건강한 국내 소아 <b>MSSA 약 80%</b> <span class="tag tb">p.388</span></li>
+      <li>신생아는 열 없이 가성 마비로 올 수 있음 <span class="tag tb">p.388</span></li>
+      <li>CRP 추적이 치료 반응 판단에 유용. 혈액 배양 양성 약 50% <span class="tag tb">p.388</span></li>
+      <li>X선 골 변화는 7~14일 뒤. <b>초음파</b>로 삼출 확인·천자 유도. MRI가 골수염에 가장 민감 <span class="tag tb">p.388</span></li>
+      <li>감별: 일과성 활막염, Perthes병, 백혈병, 반응성 관절염 <span class="tag tb">p.388</span></li>
+    </ul>
+    <div>
+      <div class="good"><b>Kocher 기준</b> <span class="tag gl">G14</span>
+        <ol class="sm" style="margin:12px 0 0;padding-left:1.2em">
+          <li>체중 부하 불가</li>
+          <li>체온 &gt;38.5°C</li>
+          <li>ESR &gt;40 mm/h</li>
+          <li>WBC &gt;12,000/µL</li>
+        </ol>
+        <p class="sm" style="margin:12px 0 0">충족 개수가 많을수록 화농관절염 가능성 상승. CRP &gt;2 mg/dL은 이후 추가된 예측 인자</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="src">홍창의 소아과학 12판 p.386~388 · G14 Kocher MS, et al. JBJS Am 1999;81:1662-1670 · 케이스 6</span><span class="pg"></span></div>
+</section>
+
+<!-- 25 -->
+<section class="slide">
+  <div class="kicker">10. 골수염·화농관절염</div><h2>치료</h2><div class="rule"></div>
+  <div class="body cols" style="zoom:1.3">
+    <div>
+      <div class="key" style="font-size:32px">MSSA: cefazolin 100 mg/kg/일 (3회 분할) <span class="tag tb">p.388</span></div>
+      <ul class="sm">
+        <li>CA-MRSA가 10% 이상이거나 독성 증상: vancomycin 60 mg/kg/일 추가 <span class="tag tb">p.388</span></li>
+        <li>국내 MRSA는 clindamycin 내성률이 높아 단독 사용 제한 <span class="tag tb">p.388</span></li>
+        <li>신생아: nafcillin + cefotaxime <span class="tag tb">p.388</span></li>
+        <li><b>고관절</b>은 대퇴골두 혈류 보호를 위해 응급 수술 고려 <span class="tag tb">p.388~389</span></li>
+      </ul>
+    </div>
+    <div>
+      <ul class="sm">
+        <li>호전 + 48~72시간 무열 → 경구 cephalexin 80~100 mg/kg/일 <span class="tag tb">p.389</span></li>
+        <li>기간: 화농관절염 2~3주, 골수염 3~4주(CRP 정상화 시) 또는 4~6주 <span class="tag tb">p.389</span></li>
+        <li>CRP는 7~10일 안에 정상화, ESR은 더 늦게 떨어짐 <span class="tag tb">p.388~389</span></li>
+        <li>72시간 뒤 호전이 없으면 진단·항생제·수술 재평가 <span class="tag tb">p.388~389</span></li>
+      </ul>
+      <div class="note sm" style="margin-top:16px"><b>최신 근거</b>: PIDS/IDSA 2023은 합병증 없는 화농관절염에서 총 10~14일도 제시 <span class="tag gl">G5</span></div>
+    </div>
+  </div>
+  <div class="foot"><span class="src">홍창의 소아과학 12판 p.388~389 · G5 Woods CR, et al. J Pediatric Infect Dis Soc 2024;13:1-59</span><span class="pg"></span></div>
+</section>
+
+<!-- 26 -->
+<section class="slide">
+  <div class="kicker">11. 세균 위장관염</div><h2>기본은 탈수 관리, 항생제는 선별</h2><div class="rule"></div>
+  <div class="body cols" style="grid-template-columns:1fr 1.15fr;zoom:1.3">
+    <ul class="sm">
+      <li>원인과 관계없이 <b>탈수 정도</b>로 수액 치료 결정 <span class="tag tb">p.384~387</span></li>
+      <li>염증 설사(대장): 발열, 뒤무직, 점액·혈변. 시겔라, EHEC, 살모넬라, 캄필로박터 <span class="tag tb">p.384~387</span></li>
+      <li>대변 배양: HUS 의심, 혈성 설사, 집단 발생, 면역결핍 <span class="tag tb">p.384~387</span></li>
+      <li><b>지사제는 쓰지 않음</b> <span class="tag tb">p.384~387</span></li>
+      <li>장외: 반응관절염, 길랑-바레(캄필로박터), HUS(O157:H7) <span class="tag tb">p.386 표 12-8</span></li>
+    </ul>
+    <table style="font-size:26px">
+      <tr><th>원인균</th><th>항생제</th></tr>
+      <tr><td class="h">비장티푸스 살모넬라</td><td>대부분 불필요. 3개월 미만, 면역결핍, 전신 감염만</td></tr>
+      <tr><td class="h">시겔라</td><td>중증, 면역결핍</td></tr>
+      <tr><td class="h">캄필로박터</td><td>대부분 불필요. 유행 차단, 침습 감염</td></tr>
+      <tr><td class="h" style="color:var(--accent2)">EHEC (O157:H7)</td><td><b>쓰지 않음</b> (HUS 위험)</td></tr>
+      <tr><td class="h">C. difficile</td><td>원인 항생제 중단, metronidazole·vancomycin</td></tr>
+    </table>
+  </div>
+  <div class="foot"><span class="src">홍창의 소아과학 12판 p.384~387 표 12-8, 12-9 · G6 IDSA 2017 감염성 설사</span><span class="pg"></span></div>
+</section>
+
+<!-- 27 -->
+<section class="slide">
+  <div class="kicker">11. 살모넬라</div><h2>비장티푸스 살모넬라증</h2><div class="rule"></div>
+  <div class="body cols" style="zoom:1.3">
+    <ul class="sm">
+      <li>S. Enteritidis, S. Typhimurium. 가금류·달걀·육류, <b>파충류 애완동물</b> <span class="tag tb">p.428~430</span></li>
+      <li>잠복기 6~72시간, 발열과 물설사 또는 혈변. 건강한 소아는 2~7일에 호전 <span class="tag tb">p.428~430</span></li>
+      <li>균혈증 1~5%. 3개월 이하, 면역결핍, 용혈빈혈이 고위험. 발열이 5일 넘으면 균혈증 의심 <span class="tag tb">p.428~430</span></li>
+      <li>균 배출 약 5주, <b>5세 미만은 20주까지</b> <span class="tag tb">p.428~430</span></li>
+    </ul>
+    <div>
+      <div class="warn sm" style="margin-bottom:20px">항생제는 정상 세균총을 억제하고 <b>균 배출을 늘려</b> 보균 상태를 만들 수 있음. 고위험군에만 사용 <span class="tag tb">p.428~430</span></div>
+      <div class="card sm"><h4>장티푸스와 차이 <span class="tag tb">p.430</span></h4>S. Typhi는 사람만 감염, M세포로 침입해 세망내피계에서 증식하는 전신 질환(잠복기 7~14일). 비장티푸스는 대부분 장관 내 국소 염증</div>
+    </div>
+  </div>
+  <div class="foot"><span class="src">홍창의 소아과학 12판 p.428~430 · 케이스 7</span><span class="pg"></span></div>
+</section>
+
+<!-- 28 -->
+<section class="slide">
+  <div class="kicker">12. 공중보건</div><h2>감염병 신고와 격리</h2><div class="rule"></div>
+  <div class="body" style="zoom:1.1">
+    <table style="font-size:25px">
+      <tr><th style="width:23%">질환</th><th style="width:30%">법정감염병 분류</th><th>격리·조치</th></tr>
+      <tr><td class="h">수막구균 감염증</td><td>제2급 (24시간 이내)</td><td>항생제 시작 후 24시간 비말격리, 접촉자 예방 투약 <span class="tag tb">p.423~424</span></td></tr>
+      <tr><td class="h">폐렴구균 감염증</td><td>제2급 (24시간 이내, 환자·의사환자)</td><td>병원체보유자는 신고하지 않음. 배양 확정 전 의심 단계에서도 신고</td></tr>
+      <tr><td class="h">b형헤모필루스인플루엔자</td><td>제2급 (24시간 이내, 환자·의사환자)</td><td>병원체보유자는 신고하지 않음</td></tr>
+      <tr><td class="h">백일해</td><td>제2급</td><td>항생제 시작 후 5일(미사용 시 발작 기침 후 3주), 가족 예방 투약 <span class="tag tb">p.427</span></td></tr>
+      <tr><td class="h">성홍열</td><td>제2급</td><td>항생제 시작 24시간 뒤 등원 <span class="tag tb">p.409, 413</span></td></tr>
+      <tr><td class="h">장출혈성대장균감염증</td><td>제2급</td><td>용혈요독증후군 감시</td></tr>
+      <tr><td class="h">살모넬라균 감염증</td><td>제4급 (표본감시, 7일 이내)</td><td>개별 신고 대상 아님. 식중독 의심이면 관할 시·군·구에 보고(식품위생법 제86조) <span class="tag tb">p.430</span></td></tr>
+    </table>
+    <p class="xs" style="margin-top:14px;color:var(--muted)"><span class="tag inf">해설</span> 분류는 개정될 수 있으므로 질병관리청 「법정감염병 분류」 최신판으로 확인하세요. 교과서 p.385에는 개정 전 분류("1군")가 남아 있습니다.</p>
+  </div>
+  <div class="foot"><span class="src">G11 감염병예방법, 질병관리청 감염병포털 법정감염병 분류·신고 범위(2026-11-14 확인), 식품위생법 제86조</span><span class="pg"></span></div>
+</section>
+
+<!-- 29 section -->
+<section class="slide section">
+  <div class="num">Ⅲ</div><h1>액티브러닝</h1><p>임상추론 시뮬레이터로 직접 진료합니다</p>
+</section>
+
+<!-- 30 -->
+<section class="slide">
+  <div class="kicker">13. 시뮬레이터</div><h2>오늘 풀 케이스 7개</h2><div class="rule"></div>
+  <div class="body" style="zoom:1.15">
+    <table style="font-size:27px">
+      <tr><th style="width:5%">#</th><th style="width:38%">환자</th><th>연습할 것</th></tr>
+      <tr><td class="h">1</td><td>열이 나지만 잘 먹는다는 생후 6주 남아</td><td>영아 발열 위험 분류, 도뇨 소변·혈액 배양, 입원</td></tr>
+      <tr><td class="h">2</td><td>다리에 붉은 점이 번지며 처지는 18개월 여아</td><td>패혈쇼크 첫 1시간, 신고, 접촉자 예방</td></tr>
+      <tr><td class="h">3</td><td>열이 나다가 경련한 10개월 남아</td><td>요추천자 금기, 뇌척수액 해석, vancomycin + ceftriaxone, 청력</td></tr>
+      <tr><td class="h">4</td><td>목이 아프고 온몸이 오돌토돌한 6세 여아</td><td>신속항원검사, amoxicillin 10일, 등원 기준</td></tr>
+      <tr><td class="h">5</td><td>기침하다 얼굴이 파래지는 생후 7주 여아</td><td>PCR, 입원·격리, azithromycin, 가족 예방 투약</td></tr>
+      <tr><td class="h">6</td><td>열이 나고 오른쪽 다리를 딛지 않는 4세 남아</td><td>초음파, 관절천자, cefazolin, 응급 배농</td></tr>
+      <tr><td class="h">7</td><td>캠핑 다녀온 뒤 피 섞인 설사를 하는 3세 남아</td><td>탈수 평가, 대변 배양, 항생제·지사제 쓰지 않기</td></tr>
+    </table>
+  </div>
+  <div class="foot"><span class="src">시뮬레이터 기본 제공 시나리오 목록 · 결과 화면에서 정확도·적시성·효율·병력청취 점수 확인</span><span class="pg"></span></div>
+</section>
+
+<!-- 31 -->
+<section class="slide">
+  <div class="kicker">13. 시뮬레이터</div><h2>진행 방법</h2><div class="rule"></div>
+  <div class="body" style="zoom:1.3">
+    <div class="flow" style="margin-bottom:40px">
+      <div class="st"><b>① 혼자 풀기</b>문진·진찰·검사·치료를 시간 안에 선택</div><div class="ar">›</div>
+      <div class="st"><b>② 조별 토론</b>놓친 핵심 행동<br>하지 말아야 했던 행동</div><div class="ar">›</div>
+      <div class="st hot"><b>③ 다시 풀기</b>강의안 해당 장을 펴고<br>근거를 확인하며</div>
+    </div>
+    <div class="key">권장 순서: 총론에서 각론으로<br><span class="big">1 → 2 → 3 → 6 → 7 → 4 → 5</span></div>
+  </div>
+  <div class="foot"><span class="src"><span class="tag inf">해설</span> 운영 방법은 강의자 제안</span><span class="pg"></span></div>
+</section>
+
+<!-- 32 -->
+<section class="slide">
+  <div class="kicker">14. 디브리핑</div><h2>케이스마다 5단계를 적용해 봅니다</h2><div class="rule"></div>
+  <div class="body" style="zoom:1.15">
+    <table style="font-size:25px">
+      <tr><th>케이스</th><th>① 세균 감염인가</th><th>② 미생물 검사</th><th>③ 경험적 항생제</th><th>④ 조정</th><th>⑤ 안전성·합병증</th></tr>
+      <tr><td class="h">1 요로감염</td><td>영아 SBI</td><td>도뇨 소변·혈액 배양</td><td>3세대 세팔로스포린</td><td>감수성 후 경구</td><td>신장 초음파</td></tr>
+      <tr><td class="h">2 수막알균</td><td>패혈쇼크</td><td>혈액 배양(지연 없이)</td><td>ceftriaxone</td><td>penicillin G</td><td>DIC, 사지 괴저</td></tr>
+      <tr><td class="h">3 수막염</td><td>세균 수막염</td><td>혈액 배양·뇌척수액</td><td>vancomycin + 3세대</td><td>감수성 후 조정</td><td>청력, SIADH, 신고</td></tr>
+      <tr><td class="h">4 성홍열</td><td>신속항원 양성</td><td>신속항원·배양</td><td>amoxicillin</td><td>10일 완료</td><td>사구체신염, 류마티스열</td></tr>
+      <tr><td class="h">5 백일해</td><td>PCR 양성</td><td>PCR</td><td>azithromycin</td><td>5일</td><td>날문협착(erythromycin)</td></tr>
+      <tr><td class="h">6 화농관절염</td><td>관절액</td><td>관절액·혈액 배양</td><td>cefazolin ± vancomycin</td><td>경구 전환</td><td>성장판</td></tr>
+      <tr><td class="h">7 살모넬라</td><td>항생제 불필요</td><td>대변 배양</td><td>—</td><td>—</td><td>보균, 균 배출</td></tr>
+    </table>
+  </div>
+  <div class="foot"><span class="src">5단계: 홍창의 소아과학 12판 p.400</span><span class="pg"></span></div>
+</section>
+
+<!-- 33 -->
+<section class="slide">
+  <div class="kicker">14. 디브리핑</div><h2>토론 질문</h2><div class="rule"></div>
+  <div class="body" style="zoom:1.3">
+    <ol style="padding-left:1.2em;font-size:38px;line-height:1.55">
+      <li>교과서의 영아 발열 기준과 AAP 2021은 뇌척수액 검사 여부에서 어떻게 다른가? 우리 병원이라면?</li>
+      <li>패혈증 정의가 SIRS 중심에서 장기 기능장애 중심(Phoenix)으로 바뀐 이유는?</li>
+      <li>케이스 7에서 보호자가 항생제를 원할 때 어떻게 설명하겠는가?</li>
+      <li>2024년 국내 첫 영아 백일해 사망을 막을 수 있었던 공중보건 조치는?</li>
+    </ol>
+  </div>
+  <div class="foot"><span class="src"><span class="tag inf">해설</span> G1, G3, 교과서 p.430, G13 참조</span><span class="pg"></span></div>
+</section>
+
+<!-- 34 -->
+<section class="slide">
+  <div class="kicker">15. 정리</div><h2>한 장 요약</h2><div class="rule"></div>
+  <div class="body cols3" style="gap:20px;grid-auto-rows:1fr;zoom:1.05">
+    <div class="card"><h4>발열·영아 발열</h4>직장 ≥38°C. 3개월 미만 SBI 7~13%, 요로감염 최다. 도뇨·치골상부 천자. 신생아 입원 + ampicillin + cefotaxime</div>
+    <div class="card"><h4>패혈쇼크</h4>산소 → 정맥/골내 → 배양 → 1시간 안 항생제 → 20 mL/kg 반복 → epinephrine/norepinephrine</div>
+    <div class="card"><h4>검사·항생제</h4>항생제 전 배양. 5단계: 필요성 → 검체 → 경험적 선택 → 조정 → 안전성</div>
+    <div class="card"><h4>세균 수막염</h4>다핵구, 당 &lt;40, 단백 상승. vancomycin 60 + ceftriaxone 100 mg/kg/일(최대 2 g/dose). 청력검사</div>
+    <div class="card"><h4>수막알균</h4>열 + 점상출혈 = 응급. 비말격리 24시간. 접촉자 예방 투약. 제2급</div>
+    <div class="card"><h4>GAS·성홍열</h4>신속항원 음성이면 배양. amoxicillin 10일. 류마티스열은 예방, 사구체신염은 근거 없음</div>
+    <div class="card"><h4>백일해</h4>3개월 미만 whoop 없이 무호흡. 입원, azithromycin 5일, 격리 5일, 가족 예방 투약, 임신부 Tdap</div>
+    <div class="card"><h4>골관절 감염</h4>MSSA 약 80% → cefazolin. 초음파·관절천자. 고관절 응급 배농. 48~72시간 무열이면 경구</div>
+    <div class="card"><h4>세균 장염</h4>탈수 관리. 지사제 금지. 살모넬라는 고위험군만 항생제. EHEC 항생제 금지. 5세 미만 배출 20주</div>
+  </div>
+  <div class="foot"><span class="src">각 항목의 근거는 앞 슬라이드와 강의안 참조</span><span class="pg"></span></div>
+</section>
+
+<!-- 35 -->
+<section class="slide">
+  <div class="kicker">마무리</div><h2>수업 후 형성평가</h2><div class="rule"></div>
+  <div class="body center">
+    <div class="qbox">10문항<br><span class="sm" style="color:var(--muted)">수업 전 형성평가와 같은 주제를 케이스로 다시 묻습니다.<br>틀린 문항은 강의안의 해당 장과 시뮬레이터 케이스로 복습하세요.</span></div>
+  </div>
+  <div class="foot"><span class="src">문항지는 별도 배포</span><span class="pg"></span></div>
+</section>
+
+<!-- 36 -->
+<section class="slide">
+  <div class="kicker">참고문헌</div><h2>근거</h2><div class="rule"></div>
+  <div class="body" style="font-size:21px;line-height:1.45;zoom:1.2">
+    <p style="margin:0 0 10px"><b>교과서</b> 홍창의 소아과학 12판. 제12장 감염병 p.372~431, 제20장 세균 수막염 p.1236~1240. · 한국보건의료인국가시험원, 의사 국가시험[필기] 평가목표집.</p>
+    <ul style="padding-left:1.1em">
+      <li>G1. Pantell RH, et al. Evaluation and Management of Well-Appearing Febrile Infants 8 to 60 Days Old. Pediatrics 2021;148(2):e2021052228.</li>
+      <li>G2. Weiss SL, et al. Surviving Sepsis Campaign International Guidelines for Septic Shock and Sepsis-Associated Organ Dysfunction in Children. Pediatr Crit Care Med 2020;21(2):e52-e106.</li>
+      <li>G3. Schlapbach LJ, et al. International Consensus Criteria for Pediatric Sepsis and Septic Shock. JAMA 2024;331(8):665-674.</li>
+      <li>G5. Woods CR, et al. PIDS/IDSA 2023 Guideline on Acute Bacterial Arthritis in Pediatrics. J Pediatric Infect Dis Soc 2024;13(1):1-59.</li>
+      <li>G6. Shane AL, et al. 2017 IDSA Clinical Practice Guidelines for the Diagnosis and Management of Infectious Diarrhea. Clin Infect Dis 2017;65(12):e45-e80.</li>
+      <li>G7. Linder JA, et al. 2025 IDSA Guideline Update on Group A Streptococcal Pharyngitis. Clin Infect Dis 2026;82(Suppl 3):i97-i104.</li>
+      <li>G9. CDC. Recommended Antimicrobial Agents for the Treatment and Postexposure Prophylaxis of Pertussis. MMWR Recomm Rep 2005;54(RR-14):1-16. AAP Red Book.</li>
+      <li>G11. 감염병의 예방 및 관리에 관한 법률, 법정감염병 분류 및 신고 범위(질병관리청 감염병포털, 2026-11-14 확인). 식품위생법 제86조.</li>
+      <li>G13. 질병관리청 보도자료(2024.11.12). 백일해 국내 첫 사망자 발생.</li>
+      <li>G14. Kocher MS, et al. Differentiating between septic arthritis and transient synovitis of the hip in children. J Bone Joint Surg Am 1999;81(12):1662-1670.</li>
+    </ul>
+    <p style="margin:8px 0 0;color:var(--muted)">G9, G11, G14의 서지는 강의자가 기억으로 정리했으므로 원문으로 확인하기를 권합니다. 교육용 자료이며 실제 진료 지침을 대신하지 않습니다.</p>
+  </div>
+  <div class="foot"><span class="src">건양대학교병원 소아청소년과</span><span class="pg"></span></div>
+</section>
+
+</div></div>
+<div id="help">← → 이동 · F 전체화면</div>
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide')), n=slides.length, i=0;
+  var deck=document.getElementById('deck'), bar=document.getElementById('bar');
+  slides.forEach(function(s,k){var p=s.querySelector('.pg'); if(p) p.textContent=(k+1)+' / '+n;});
+  function fit(){var sc=Math.min(window.innerWidth/1920, window.innerHeight/1080); deck.style.transform='scale('+sc+')';}
+  function show(k){
+    i=Math.max(0,Math.min(n-1,k));
+    slides.forEach(function(s,j){s.classList.toggle('on',j===i);});
+    bar.style.width=((i+1)/n*100)+'%';
+    try{history.replaceState(null,'','#'+(i+1));}catch(e){}
+  }
+  setTimeout(function(){var hp=document.getElementById('help'); if(hp) hp.style.opacity=0;},5000);
+  var h=parseInt((location.hash||'').slice(1),10); show(isNaN(h)?0:h-1); fit();
+  window.addEventListener('resize',fit);
+  document.addEventListener('keydown',function(e){
+    var k=e.key;
+    if(k==='ArrowRight'||k==='PageDown'||k===' '||k==='Enter'||k==='ArrowDown'){e.preventDefault();show(i+1);}
+    else if(k==='ArrowLeft'||k==='PageUp'||k==='Backspace'||k==='ArrowUp'){e.preventDefault();show(i-1);}
+    else if(k==='Home'){show(0);} else if(k==='End'){show(n-1);}
+    else if(k==='f'||k==='F'){ if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();} else {document.exitFullscreen&&document.exitFullscreen();} }
+  });
+  document.getElementById('stage').addEventListener('click',function(e){
+    if(e.clientX < window.innerWidth*0.3) show(i-1); else show(i+1);
+  });
+  var x0=null;
+  document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;},{passive:true});
+  document.addEventListener('touchend',function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0; if(Math.abs(dx)>50) show(i+(dx<0?1:-1)); x0=null;});
+})();
+</script>
+</body>
+</html>
